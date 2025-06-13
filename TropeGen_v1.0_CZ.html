@@ -58,6 +58,25 @@
   background-color: #23a149; /* zapnout sfw */
   color: #fff;
 }
+
+.language-switch {
+  color: white;
+  text-decoration: none;
+  margin-top: auto;
+  padding: 1em;
+  font-size: 0.9em;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+}
+
+.language-switch:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
   </style>  
 </head>
 <body>
@@ -134,5 +153,6 @@
     document.getElementById("promptDisplay").innerHTML = prompt;
   }
 </script>
+<a href="TropeGen_v1.0_EN.html" class="language-switch">» ENGLISH «</a>
 </body>
 </html>
