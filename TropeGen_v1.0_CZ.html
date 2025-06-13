@@ -44,54 +44,42 @@
   <h1>TropeGen v1.0 Česká rodinná verze</h1>
   <button onclick="generatePrompt()">Per to do mě</button>
   <div class="prompt" id="promptDisplay"></div>
-  <script>
-    const universes = [
-      "Souznějící s kánonem", "Pokánon", "Předkánon", "Moderní AV (Alternativní vesmír)",
-      "Střední škola AV (Alternativní vesmír)", "Vejška AV (Alternativní vesmír)", "Kavárna AV (Alternativní vesmír)", "Prohozz (Výměna rolí)",
-      "Hogo fogo AV (Alternativní vesmír)", "Historický AV (Alternativní vesmír)", "Vesmír AV (Alternativní vesmír)", "Nadpřirozený AV (Alternativní vesmír)",
-      "Postapo/Dystopie AV (Alternativní vesmír)", "Fantasy AV (Alternativní vesmír)", "Cestování v čase AV (Alternativní vesmír)", "Opačné pohlaví AV (Alternativní vesmír)",
-      "Překřížovka (Crossover)"
-    ];
-  
-    const genres = [
-      "Romantika", "Komedie", "Smuť (Smutné)", "Drama", "Ubliž/Ukliď", "Ňuňu",
-      "Záhadný", "Horor", "Akční/Dobrodružný", "Krajíc života",
-      "Tragédie", "Parodie", "Temný", "Psychologický"
-    ];
-  
-    const tropes = [
-      "Z nekámošek milenci", "Z kámošek milenci", "Předstírané randění", "Ustanovený vztah",
-      "Milostný trojúhelník", "Nalezená rodina", 
-      "Amnézie", "Jenom jedna postel", "Nedorozumění", 
-      "Tajná identita", "Náhodné obdržení dítěte",
-      "Reinkarnace", "Výměna těl", "Zakázaná láska", "Partner ochranář",
-      "Neopětovaná láska", "Hore/dole dynamika"
-    ];
-  
-    function getRandomElements(arr, count) {
-      const copy = [...arr];
-      const result = [];
-      for (let i = 0; i < count; i++) {
-        const index = Math.floor(Math.random() * copy.length);
-        result.push(copy.splice(index, 1)[0]);
-      }
-      return result;
+<script>
+  let universes = [], genres = [], tropes = [];
+
+  fetch('https://opensheet.elk.sh/1EKXubuWqIl0sQ9ZCOqM1euC6vgg7zu06EdhRFmabdnU/tags1')
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(row => {
+        if (row.universe) universes.push(row.universe);
+        if (row.genre) genres.push(row.genre);
+        if (row.trope) tropes.push(row.trope);
+      });
+      generatePrompt();
+    });
+
+  function getRandomElements(arr, count) {
+    const copy = [...arr];
+    const result = [];
+    for (let i = 0; i < count; i++) {
+      const index = Math.floor(Math.random() * copy.length);
+      result.push(copy.splice(index, 1)[0]);
     }
-  
-    function generatePrompt() {
-      const universe = getRandomElements(universes, 1);
-      const selectedGenres = getRandomElements(genres, 2);
-      const selectedTropes = getRandomElements(tropes, 2);
-  
-      const prompt = `
-        <strong>Vesmír:</strong> ${universe[0]}<br>
-        <strong>Žánr:</strong> ${selectedGenres.join(", ")}<br>
-        <strong>Zápletka:</strong> ${selectedTropes.join(", ")}
-      `;
-      document.getElementById("promptDisplay").innerHTML = prompt;
-    }
-  
-    generatePrompt();
-  </script>  
+    return result;
+  }
+
+  function generatePrompt() {
+    const universe = getRandomElements(universes, 1);
+    const selectedGenres = getRandomElements(genres, 2);
+    const selectedTropes = getRandomElements(tropes, 2);
+
+    const prompt = `
+      <strong>Universe:</strong> ${universe[0]}<br>
+      <strong>Genres:</strong> ${selectedGenres.join(", ")}<br>
+      <strong>Tropes:</strong> ${selectedTropes.join(", ")}
+    `;
+    document.getElementById("promptDisplay").innerHTML = prompt;
+  }
+</script>
 </body>
 </html>
