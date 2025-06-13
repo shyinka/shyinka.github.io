@@ -71,12 +71,12 @@
   function generatePrompt() {
     const universe = getRandomElements(universes, 1);
     const selectedGenres = getRandomElements(genres, 2);
-    const selectedTropes = getRandomElements(tropes, 2);
+    const selectedTropes = getRandomElements(tropes, 1);
 
     const prompt = `
-      <strong>Universe:</strong> ${universe[0]}<br>
-      <strong>Genres:</strong> ${selectedGenres.join(", ")}<br>
-      <strong>Tropes:</strong> ${selectedTropes.join(", ")}
+      <strong>Vesmír:</strong> ${universe[0]}<br>
+      <strong>Žánr:</strong> ${selectedGenres.join(", ")}<br>
+      <strong>Zápletka:</strong> ${selectedTropes.join(", ")}
     `;
     document.getElementById("promptDisplay").innerHTML = prompt;
   }
