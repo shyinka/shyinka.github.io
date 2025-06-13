@@ -20,7 +20,7 @@
     button {
       font-size: 2.0em;
       padding: 1em;
-      margin: 1em 0 1em 0;
+      margin: 1em 0 0 0;
       cursor: pointer;
       border: none;
       border-radius: 15px;
@@ -34,6 +34,7 @@
       padding: 2em;
       border-radius: 15px;
       max-width: 70%;
+      margin: 1em 0 0 0;
     }
 
     h1, h2 {
@@ -45,26 +46,70 @@
       margin-top: 0.5em;
       font-size: 1em;
     }
+
+    #toggleSecondary {
+  font-size: 1.0em;
+  padding: 1em;
+  background-color: #666;
+  transition: background-color 0.3s ease;
+}
+
+#toggleSecondary.active {
+  background-color: #e93755; /* active */
+  color: #fff;
+}
   </style>  
 </head>
 <body>
   <h1>TropeGen v1.0</h1>
-  <h2>Česká rodinná verze</h2>
+  <h2>Česká verze</h2>
   <button onclick="generatePrompt()">něco mi tam vylosuj</button>
+  <button id="toggleSecondary" onclick="toggleSecondary()"></button>
   <div class="prompt" id="promptDisplay"></div>
 <script>
   let universes = [], genres = [], tropes = [];
+  let useSecondaryTags = false;
+
+      document.addEventListener("DOMContentLoaded", () => {
+      updateToggleButton();
+      loadTags();
+    });
+
+    function updateToggleButton() {
+  const btn = document.getElementById("toggleSecondary");
+  btn.innerText = useSecondaryTags
+    ? "Zapnout rodinnou verzi (SFW)"
+    : "Vypnout rodinnou verzi (NSFW)";
+    
+  if (useSecondaryTags) {
+    btn.classList.add("active");
+  } else {
+    btn.classList.remove("active");
+  }
+}
+    function toggleSecondary() {
+      useSecondaryTags = !useSecondaryTags;
+      updateToggleButton();
+      loadTags();
+    }
+
+    function loadTags() {
+      genres = [];
+      tropes = [];
 
   fetch('https://opensheet.elk.sh/1EKXubuWqIl0sQ9ZCOqM1euC6vgg7zu06EdhRFmabdnU/tags1')
     .then(res => res.json())
     .then(data => {
       data.forEach(row => {
         if (row.universe) universes.push(row.universe);
-        if (row.genre) genres.push(row.genre);
-        if (row.trope) tropes.push(row.trope);
+         if (row.genre) genres.push(row.genre);
+         if (useSecondaryTags && row.genre2) genres.push(row.genre2);
+         if (row.trope) tropes.push(row.trope);
+        if (useSecondaryTags && row.trope2) tropes.push(row.trope2);
       });
       generatePrompt();
     });
+  }
 
   function getRandomElements(arr, count) {
     const copy = [...arr];
