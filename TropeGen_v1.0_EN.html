@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TropeGen v1.0 EN</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #232323;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+  
+    button {
+      font-size: 2.0em;
+      padding: 1em;
+      margin: 1em 0 0 0;
+      cursor: pointer;
+      border: none;
+      border-radius: 15px;
+      background-color: #e93755;
+      color: white;
+    }
+  
+    .prompt {
+      font-size: 2.0em;
+      background: #000000;
+      padding: 2em;
+      border-radius: 15px;
+      max-width: 70%;
+      margin: 1em 0 0 0;
+    }
+
+    h1, h2 {
+      margin: 0;
+    }
+
+    h2 {
+      font-style: italic;
+      margin-top: 0.5em;
+      font-size: 1em;
+    }
+
+    #toggleSecondary {
+  font-size: 1.0em;
+  padding: 1em;
+  background-color: #666;
+  transition: background-color 0.3s ease;
+}
+
+#toggleSecondary.active {
+  background-color: #23a149; /* zapnout sfw */
+  color: #fff;
+}
+
+.language-switch {
+  color: white;
+  text-decoration: none;
+  margin-top: auto;
+  padding: 1em;
+  font-size: 0.9em;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+}
+
+.language-switch:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+  </style>  
+</head>
+<body>
+  <h1>TropeGen v1.0</h1>
+  <h2>English version</h2>
+  <button onclick="generatePrompt()">pick me something</button>
+  <button id="toggleSecondary" onclick="toggleSecondary()"></button>
+  <div class="prompt" id="promptDisplay"></div>
+<script>
+  let universes = [], genres = [], tropes = [];
+  let useSecondaryTags = false;
+
+      document.addEventListener("DOMContentLoaded", () => {
+      updateToggleButton();
+      loadTags();
+    });
+
+    function updateToggleButton() {
+  const btn = document.getElementById("toggleSecondary");
+  btn.innerText = useSecondaryTags
+    ? "Turn on family friendly version (SFW)"
+    : "Turn off family friendly version (NSFW)";
+    
+  if (useSecondaryTags) {
+    btn.classList.add("active");
+  } else {
+    btn.classList.remove("active");
+  }
+}
+    function toggleSecondary() {
+      useSecondaryTags = !useSecondaryTags;
+      updateToggleButton();
+      loadTags();
+    }
+
+    function loadTags() {
+      genres = [];
+      tropes = [];
+
+  fetch('https://opensheet.elk.sh/1EKXubuWqIl0sQ9ZCOqM1euC6vgg7zu06EdhRFmabdnU/tags2')
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(row => {
+        if (row.universe) universes.push(row.universe);
+         if (row.genre) genres.push(row.genre);
+         if (useSecondaryTags && row.genre2) genres.push(row.genre2);
+         if (row.trope) tropes.push(row.trope);
+        if (useSecondaryTags && row.trope2) tropes.push(row.trope2);
+      });
+      generatePrompt();
+    });
+  }
+
+  function getRandomElements(arr, count) {
+    const copy = [...arr];
+    const result = [];
+    for (let i = 0; i < count; i++) {
+      const index = Math.floor(Math.random() * copy.length);
+      result.push(copy.splice(index, 1)[0]);
+    }
+    return result;
+  }
+
+  function generatePrompt() {
+    const universe = getRandomElements(universes, 1);
+    const selectedGenres = getRandomElements(genres, 2);
+    const selectedTropes = getRandomElements(tropes, 3);
+
+    const prompt = `
+      <strong>Universe:</strong> ${universe[0]}<br>
+      <strong>Genre:</strong> ${selectedGenres.join(", ")}<br>
+      <strong>Contains:</strong> ${selectedTropes.join(", ")}
+    `;
+    document.getElementById("promptDisplay").innerHTML = prompt;
+  }
+</script>
+<a href="TropeGen_v1.0_CZ.html" class="language-switch">» CZECH «</a>
+</body>
+</html>
