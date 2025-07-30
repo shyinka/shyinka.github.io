@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My building checklist</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #232323;
+    html, body {
       margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 0;
+      height: 100%;
+      background: #232323;
+      font-family: Arial, sans-serif;
+      display: grid;
+      place-items: center;
     }
+
+    body {
+      min-height: 100vh;
+    }
+
     .checklist {
       background: black;
-      color: #ffffff;
+      color: #fff;
       padding: 5vw;
       border-radius: 12px;
       width: 80vw;
       max-width: 500px;
+      box-sizing: border-box;
     }
     .checklist h2 {
       text-align: center;
@@ -32,40 +38,40 @@
       margin-bottom: 10px;
     }
     .task input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #555;
-    border-radius: 4px;
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #555;
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
     .task input[type="checkbox"]:checked {
-    background-color: #e73357;
-    border-color: #e73357;
+      background-color: #e73357;
+      border-color: #e73357;
     }
-
     .task input[type="checkbox"]:checked::after {
-    content: "✓";
-    color: white;
-    font-size: 16px;
-    line-height: 1;
+      content: "✓";
+      color: white;
+      font-size: 16px;
+      line-height: 1;
     }
   </style>
 </head>
 <body>
-  <div class="checklist">
-    <h2>Things to build</h2>
-    <div id="taskList">Loading tasks...</div>
+  <div class="container">
+    <div class="checklist">
+      <h2>Things to build</h2>
+      <div id="taskList">Loading tasks...</div>
+    </div>
   </div>
 
   <script>
-    const sheetURL = "https://opensheet.vercel.app/1a44LBM5mUujak28BVvU3YAfs5KUe5sd8QI-OkBXAiPk/list1"; 
+    const sheetURL = "https://opensheet.vercel.app/1a44LBM5mUujak28BVvU3YAfs5KUe5sd8QI-OkBXAiPk/list1";
     const STORAGE_KEY = "checklistStatus";
 
     const taskList = document.getElementById("taskList");
@@ -83,11 +89,11 @@
     fetch(sheetURL)
       .then(res => res.json())
       .then(data => {
-        taskList.innerHTML = ""; // "Loading..." text
+        taskList.innerHTML = ""; // Clear "Loading..." text
         const savedState = loadSavedState();
 
-        data.forEach((row, index) => {
-          const taskText = row.builds; 
+        data.forEach((row) => {
+          const taskText = row.builds;
           if (!taskText) return;
 
           const taskDiv = document.createElement("div");
