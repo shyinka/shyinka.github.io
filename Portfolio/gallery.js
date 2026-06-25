@@ -15,3 +15,18 @@ function openImg(src) {
 
   document.body.appendChild(overlay);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("img/gallery_images.json")
+    .then(res => res.json())
+    .then(images => {
+      const gallery = document.querySelector(".gallery");
+
+      images.forEach(src => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.onclick = () => openImg(src);
+        gallery.appendChild(img);
+      });
+    });
+});
