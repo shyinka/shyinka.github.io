@@ -1,15 +1,8 @@
 function openImg(src) {
   const overlay = document.createElement("div");
-  overlay.style = `
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.8);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-  `;
+  overlay.className = "overlay";
 
-  overlay.innerHTML = `<img src="${src}" style="max-width:80%; max-height:80%;">`;
+  overlay.innerHTML = `<img src="${src}">`;
 
   overlay.onclick = () => overlay.remove();
 
@@ -25,6 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
       images.forEach(src => {
         const img = document.createElement("img");
         img.src = src;
+        img.loading = "lazy";
+        img.decoding = "async";
         img.onclick = () => openImg(src);
         gallery.appendChild(img);
       });
