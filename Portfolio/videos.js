@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const video = document.createElement("video");
 
                 video.controls = true;
-                video.preload = "metadata";
+                video.preload = "none";
                 video.loop = false;
                 video.playsInline = true;
 
